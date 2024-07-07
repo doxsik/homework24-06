@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-lp&l!-fw6k(mif$8_z&0l(!u9cl)xqp-(ic(!i+@&lsfet@9*a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["doxsik.pythonanywhere.com", "localhost",]
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "testapp",
+    "catalog",
 ]
 
 MIDDLEWARE = [
@@ -111,6 +112,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+MEDIA_URL = '/media/'
+STATIC_ROOT = '/home/doxsik/static'
+MEDIA_ROOT = '/home/doxsik/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
