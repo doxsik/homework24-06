@@ -12,6 +12,8 @@
     <body>
         {% for object in object_list %}
             <p>{{ object.pk }} <a href="/athor_detail/{{ object.pk }}"> {{ object }} </a>
+                <a href="/athor_update/{{ object.pk }}"><button>Update</button></a>
+                <a href="/athor_delete/{{ object.pk }}"><button>Delete</button></a>
         {% endfor %}
         <script src="" async defer></script>
     </body>
