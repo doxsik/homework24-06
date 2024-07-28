@@ -1,20 +1,25 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        {% for object in object_list %}
-            <p>{{ object.pk }} <a href="/athor_detail/{{ object.pk }}"> {{ object }} </a>
-                <a href="/book_update/{{ object.pk }}"><button>Update</button></a>
-                <a href="/book_delete/{{ object.pk }}"><button>Delete</button></a>
-        {% endfor %}
-        <script src="" async defer></script>
-    </body>
-</html>
+{% block content %}
+<h1 class="mt-5" >List of books</h1>
+<div class="container marketing">
+  <!-- Three columns of text below the carousel -->
+  <div class="row">
+  {% for book in object_list %}
+    <div class="col-lg-4">
+      <div class="card" style="width: 18rem;">
+        <a href="{% url "book_detail" book.pk %}"><img src="{{ book.cover.url }}" class="card-img-top" alt="..."></a>
+          <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            {% for athor in book.athor.all %}
+            <p class="card-text">{{ athor.name }}</p>
+            <a href="{% url "book_update" book.pk %}"><button type="button" class="btn btn-info">Update</button></a>
+            <a href="{% url "book_delete" book.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
+            {% endfor %}
+          </div>
+      </div>
+    </div><!-- /.col-lg-4 -->
+  {% endfor %}
+  </div><!-- /.row -->
+</div>
+{% endblock %}

@@ -1,16 +1,7 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        {{ object }}
-        <p>{{ object.biography }}
-        <a href="/genre_list"><button>List of genre</button></a>
-        <script src="" async defer></script>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mt-5">{{ genre.title }}</h1>
+    <p>{{ genre.description }}
+    <a href="{% url "athor_list" %}"><button type="button" class="btn btn-outline-secondary">List of genre</button></a>
+{% endblock  %}
