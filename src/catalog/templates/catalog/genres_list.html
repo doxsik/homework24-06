@@ -1,20 +1,10 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        {% for object in object_list %}
-            <p>{{ object.pk }} <a href="/genre_detail/{{ object.pk }}"> {{ object }} </a>
-                <a href="/genre_update/{{ object.pk }}"><button>Update</button></a>
-                <a href="/genre_delete/{{ object.pk }}"><button>Delete</button></a>
-        {% endfor %}
-        <script src="" async defer></script>
-    </body>
-</html>
+{% block content %}
+    <h1 class="mt-5">List of genre</h1>
+    {% for genre in object_list %}
+        <a href="/genre_detail/{{ genre.pk }}"><h3>#{{ genre.pk }} {{ genre.title }}</h3></a>
+        <a href="{% url "genre_update" genre.pk %}"><button type="button" class="btn btn-info">Update</button></a></a>
+        <a href="{% url "genre_delete" genre.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
+    {% endfor %}
+{% endblock %}
