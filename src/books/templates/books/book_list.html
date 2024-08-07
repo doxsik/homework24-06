@@ -8,13 +8,13 @@
   {% for book in object_list %}
     <div class="col-lg-4">
       <div class="card" style="width: 18rem;">
-        <a href="{% url "book_detail" book.pk %}"><img src="{{ book.cover.url }}" class="card-img-top" alt="..."></a>
+        <a href="{% url "books:book_detail" book.pk %}"><img src="{{ book.cover.url }}" class="card-img-top" alt="..."></a>
           <div class="card-body">
             <h5 class="card-title">{{ book.title }}</h5>
             {% for athor in book.athor.all %}
             <p class="card-text">{{ athor.name }}</p>
-            <a href="{% url "book_update" book.pk %}"><button type="button" class="btn btn-info">Update</button></a>
-            <a href="{% url "book_delete" book.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
+            <a href="{% url "books:book_update" book.pk %}"><button type="button" class="btn btn-info">Update</button></a>
+            <a href="{% url "books:book_delete" book.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
             {% endfor %}
           </div>
       </div>

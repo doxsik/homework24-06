@@ -3,5 +3,5 @@
 {% block content %}
     <h1 class="mt-5">{{ genre.title }}</h1>
     <p>{{ genre.description }}
-    <a href="{% url "athor_list" %}"><button type="button" class="btn btn-outline-secondary">List of genre</button></a>
+    <a href="{% url "catalog:athor_list" %}"><button type="button" class="btn btn-outline-secondary">List of genre</button></a>
 {% endblock  %}

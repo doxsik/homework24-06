@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse_lazy
 # Create your models here.
 
 class Book(models.Model):
@@ -22,9 +22,9 @@ class Book(models.Model):
     rating = models.IntegerField(null=True)
     data_created = models.DateTimeField(auto_now=False, auto_now_add=True, null=True)
     data_changed = models.DateTimeField(auto_now=True, auto_now_add=False, null=True)
-
+    
     def get_absolute_url(self):
-        return f"/book_detail/{self.pk}"
+        return reverse_lazy("books:book_detail", kwargs = {"pk":self.pk})
     
     def __str__(self):
         return self.title
