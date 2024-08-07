@@ -1,5 +1,5 @@
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 class Athor(models.Model):
     name = models.CharField(max_length=100)
@@ -9,7 +9,7 @@ class Athor(models.Model):
         return f"{self.name}"
     
     def get_absolute_url(self):
-        return f"/athor_detail/{self.pk}"
+        return reverse_lazy("catalog:athor_detail", kwargs={"pk":self.pk})
     
     
 class Series(models.Model):
@@ -20,7 +20,7 @@ class Series(models.Model):
         return f"{self.title}"
     
     def get_absolute_url(self):
-        return f"/seria_detail/{self.pk}"
+        return reverse_lazy("catalog:seria_detail", kwargs={"pk":self.pk})
 
 class Genres(models.Model):
     title = models.CharField(max_length=50)
@@ -30,7 +30,7 @@ class Genres(models.Model):
         return f"{self.title}"
     
     def get_absolute_url(self):
-        return f"/genre_detail/{self.pk}"
+        return reverse_lazy("catalog:genre_detail", kwargs={"pk":self.pk})
 
 
 class Publishing(models.Model):
@@ -41,4 +41,4 @@ class Publishing(models.Model):
         return f"{self.title}"
     
     def get_absolute_url(self):
-        return f"/publishing_detail/{self.pk}"
+        return reverse_lazy("catalog:publishing_detail", kwargs={"pk":self.pk})
