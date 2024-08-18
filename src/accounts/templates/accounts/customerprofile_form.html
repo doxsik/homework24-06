@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form class="mt-5" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <br><b>User</b>: {{ object.user }}
+    {% for group in object.user.groups.all %}
+    <br><b>Groups</b>: {{ group }}
+    {% endfor %}
+    <br><b>Password</b>: <a href={% url "password_change" %}>Set new password</a>
+    <b>{{ form|crispy }}</b>
+    <input type="submit" class="btn btn-success" value="Save">
+</form>
+{% endblock %}
