@@ -4,7 +4,9 @@
     <h1 class="mt-5">List of athors</h1>
     {% for athor in object_list %}
         <a href="{% url "catalog:athor_detail" athor.pk %}"><h3>#{{ athor.pk }} {{ athor.name }}</h3></a>
+        {% if perms.books.change_book %}
         <a href="{% url "catalog:athor_update" athor.pk %}"><button type="button" class="btn btn-info">Update</button></a></a>
         <a href="{% url "catalog:athor_delete" athor.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
+        {% endif %}
     {% endfor %}
 {% endblock %}

@@ -1,15 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 # Create your models here.
-class CustomerProfil(models.Model):
+class CustomerProfile(models.Model):
     user = models.OneToOneField(User, related_name="profile", on_delete=models.CASCADE)
-    password = models.OneToOneField(User, related_name="profile", on_delete=models.PROTECT)
-    email = models.CharField(max_length=50)
-    phone = models.IntegerField(max_length=9)
+    email = models.CharField(max_length=50, null=True)
+    phone = models.IntegerField(null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     surname = models.CharField(max_length=50, blank=True, null=True)
-    group = models.OneToOneField(Group, related_name="group", on_delete=models.SET_NULL)
-
     
+    def get_absolute_url(self):
+        return reverse_lazy("accounts:customer_profile")
     

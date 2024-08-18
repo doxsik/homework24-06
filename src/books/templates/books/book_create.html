@@ -3,7 +3,8 @@
 
 {% block content %}
 <h1 class="mt-5">Create book's card</h1>
-    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         {{ form|crispy }}
         <input type="submit" class="btn btn-success" value="Save">
     </form>

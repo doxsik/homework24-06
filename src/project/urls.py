@@ -18,18 +18,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from testapp import views as testapp
-from catalog import views as catalog
-from books import views as books
 from user import views as user_app
-from django.contrib.auth.views import LoginView, LogoutView
 from . import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", testapp.home_page),
     path("login/", user_app.LoginUser.as_view(), name='login'),
+    path("logout/", user_app.LogoutView.as_view(), name='logout'),
+    path('password_change', user_app.PasswordChangeView.as_view(), name ='password_change'),
     path("catalog/", include("catalog.urls", namespace="catalog")),
     path("books/", include("books.urls", namespace ="books")),
+    path("accounts/", include("accounts.urls", namespace ="accounts")),
+    path("orders/", include("orders.urls", namespace ="orders")),
 ]
 
 if settings.DEBUG:

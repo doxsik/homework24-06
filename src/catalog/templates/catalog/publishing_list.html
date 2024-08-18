@@ -3,8 +3,10 @@
 {% block content %}
     <h1 class="mt-5">List of publishing</h1>
     {% for publishing in object_list %}
+    {% if perms.books.change_book %}
         <a href="{% url "catalog:publishing_create" publishing.pk %}"><h3>#{{ publishing.pk }} {{ publishing.title }}</h3></a>
         <a href="{% url "catalog:publishing_update" publishing.pk %}"><button type="button" class="btn btn-info">Update</button></a></a>
         <a href="{% url "catalog:publishing_delete" publishing.pk %}"><button type="button" class="btn btn-danger">Delete</button></a>
+    {% endif %}
     {% endfor %}
 {% endblock %}

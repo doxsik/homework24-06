@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 class Book(models.Model):
     title = models.CharField(max_length=100, blank=True)
     cover = models.ImageField(upload_to="books_images/%Y/%m/%d/")
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     athor = models.ManyToManyField("catalog.Athor", verbose_name=("arthor"))
     seria = models.ManyToManyField("catalog.Series", verbose_name=("seria"))
     genre = models.ManyToManyField("catalog.Genres", verbose_name=("genre"))

@@ -4,4 +4,14 @@
     <h1 class="mt-5">{{ book.title }}</h1>
     <img src="{{ book.cover.url }}">
     <a href="{% url "books:book_list" %}"><button type="button" class="btn btn-outline-secondary">List of books</button></a>
-{% endblock %}
+    
+    <form action="{% url "orders:add_to_cart" %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="book_id" value="{{ book.id }}">
+        <div class="mb-3"></div>
+            <label class="form-label">Quantity</label>
+            <input type="number" min="1" value="1" step="1" class="form-control" name="quantity">
+            <button type="submit" class="btn btn-danger" >Add to a cart</button>
+        </div>
+    </form>
+{% endblock %}  

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "testapp",
     "catalog",
     "books",
+    "accounts",
+    "orders"
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -133,3 +135,4 @@ MEDIA_ROOT = BASE_DIR.parent / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/login/"
