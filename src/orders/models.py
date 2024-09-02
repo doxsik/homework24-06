@@ -33,3 +33,10 @@ class BookInCart(models.Model):
     def __str__(self):
         return f"Cart #{self.cart.pk} for {self.cart.user} with {self.quantity}"
     
+class Order(models.Model):
+    cart = models.OneToOneField(Cart, on_delete=models.PROTECT, related_name="order")
+    phone = models.CharField(verbose_name="Phone", max_length=16)
+    adress = models.CharField(max_length=100, verbose_name="Adress")
+    
+    def __str__(self):
+        return f"Order {self.pk}"

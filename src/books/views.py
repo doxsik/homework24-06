@@ -8,6 +8,7 @@ from . import models
 
 class BookList(generic.ListView):
     model = models.Book
+    paginate_by = 1
 
 class BookCreate(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = models.Book

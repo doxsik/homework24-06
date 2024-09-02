@@ -1,17 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="mt-5">{{ book.title }}</h1>
-    <img src="{{ book.cover.url }}">
-    <a href="{% url "books:book_list" %}"><button type="button" class="btn btn-outline-secondary">List of books</button></a>
-    
-    <form action="{% url "orders:add_to_cart" %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="book_id" value="{{ book.id }}">
-        <div class="mb-3"></div>
-            <label class="form-label">Quantity</label>
-            <input type="number" min="1" value="1" step="1" class="form-control" name="quantity">
-            <button type="submit" class="btn btn-danger" >Add to a cart</button>
+<h1 class="mt-5">{{ book.title }}</h1>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card" style="width: 20rem;">
+            <img src="{{ book.cover.url }}" class="card-img-top">
+            <form action="{% url "orders:add_to_cart" %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <label class="form-label"><b>Quantity</b></label>
+                    <input type="number" min="1" value="1" step="1" class="form-control" name="quantity">
+                    <button type="submit" class="btn btn-danger">Add to a cart</button>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="card" style="width: 60rem;">
+        <p><b>Athor: </b>{% for athor in book.athor.all %}{{ athor }}{% endfor %}
+        <p><b>Seria: </b>{% for seria in book.seria.all %}{{ seria }}{% endfor %}
+        <p><b>Genre: </b>{% for genre in book.genre.all %}{{ genre }}{% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}  

@@ -1,10 +1,22 @@
+from django.forms import BaseModelForm
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.views import generic
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from books.models import Book
-from . import models
+from . import models, forms
 
 # Create your views here.
+
+def get_customer_adress(request):
+    adress = request.user.profile
+    adress = f"Index: {adress.index}; Country: {adress.country}; City: {adress.city}; Street: {adress.street_house}"
+    return adress
+
+def get_customer_phone(request):
+    phone = request.user.profile.phone
+    return phone
+
 def get_or_create_cart(request):
     cart_id = request.session.get("cart_id", None)
     if request.user.is_anonymous:
@@ -14,7 +26,6 @@ def get_or_create_cart(request):
     cart, created = models.Cart.objects.get_or_create(pk=cart_id, defaults={"user":user})
     if created:
         request.session["cart_id"] = cart.pk
-        print(cart_id)
     return cart
 
 def get_current_cart(request):
@@ -50,9 +61,9 @@ def add_to_cart_view(request):
         add_to_cart(request)
     return HttpResponseRedirect(reverse_lazy("orders:view_cart"))
 
-def create_order():
-    pass
-
+def create_order(request):
+    cart = get_or_create_cart(request)
+    
 def update_cart(key, quantity):
     book_in_cart_id = int(key.split(".")[1])
     book_in_cart = models.BookInCart.objects.get(pk=book_in_cart_id)
@@ -72,5 +83,37 @@ def evaluate_cart(request):
                 action = value
         if action == "update":
             return HttpResponseRedirect(reverse_lazy("orders:view_cart"))
-        # create_order()
-        # return HttpResponseRedirect(reverse_lazy("orders:view_cart_created"))
+        elif action == "create":
+            return HttpResponseRedirect(reverse_lazy("orders:create_order"))
+
+
+class CreateOrderView(generic.CreateView):
+    model = models.Order
+    form_class = forms.CreateOrderForm
+    template_name = "orders/create_order.html"
+    success_url = reverse_lazy("orders:ordered")
+
+    def get_form(self, **kwargs):
+        form = super().get_form(**kwargs)
+        form.fields["phone"].initial = get_customer_phone(self.request)
+        form.fields["adress"].initial = get_customer_adress(self.request)
+        return form
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["cart"] = get_current_cart(self.request)
+        return context
+    
+    def form_valid(self, form):
+        order = form.save(commit=False)
+        order.cart = get_current_cart(self.request)
+        order.save()
+        self.object = order
+        return HttpResponseRedirect(self.get_success_url())
+    
+class Ordered(generic.TemplateView):
+    template_name = "orders/ordered.html"
+    
+    def get(self, request, *args, **kwargs):
+        request.session['cart_id'] = None
+        return super().get(request, *args, **kwargs)
