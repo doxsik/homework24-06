@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="mt-5">Order</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Books</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total price</th>
+            </tr>
+            </thead>
+            {% for book in cart.books.all %}
+            <tbody>
+            <tr>
+                <td>{{book.book}}</td>
+                <td>{{book.quantity}}</td>
+                <td>{{book.price}}</td>
+                <td>{{book.total_price}}</td>
+            </tr>
+            </tbody>
+            {% endfor %}
+            <tr>
+                <td colspan="3"><b>Order price:</td>
+                <td>{{cart.order_price}}</td>
+            </tr>
+        </table>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-success" value="Order">
+</form>    
+{% endblock %}
