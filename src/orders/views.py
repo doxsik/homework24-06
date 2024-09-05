@@ -37,6 +37,12 @@ def get_current_cart(request):
         cart = bool(cart)
     return cart
 
+def fake_delete_cart(request):
+    cart = get_current_cart(request)
+    has_book = models.BookInCart.objects.filter(cart=cart)
+    if not has_book:
+        request.session['cart_id'] = None
+
 def view_cart(request):
     cart = get_current_cart(request)
     context = {"cart": cart}
@@ -67,12 +73,13 @@ def create_order(request):
 def update_cart(key, quantity):
     book_in_cart_id = int(key.split(".")[1])
     book_in_cart = models.BookInCart.objects.get(pk=book_in_cart_id)
+    no_books = models.BookInCart.objects.all()
     if int(quantity) == 0:
         book_in_cart.delete()
     else:
         book_in_cart.quantity = int(quantity)
         book_in_cart.save()
-
+    
 def evaluate_cart(request):
     if request.method == "POST":
         action = None
@@ -82,6 +89,7 @@ def evaluate_cart(request):
             if key[0:4] == "acti":
                 action = value
         if action == "update":
+            fake_delete_cart(request)
             return HttpResponseRedirect(reverse_lazy("orders:view_cart"))
         elif action == "create":
             return HttpResponseRedirect(reverse_lazy("orders:create_order"))
