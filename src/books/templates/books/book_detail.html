@@ -16,9 +16,9 @@
             </form>
         </div>
         <div class="card" style="width: 60rem;">
-        <p><b>Athor: </b>{% for athor in book.athor.all %}{{ athor }}{% endfor %}
-        <p><b>Seria: </b>{% for seria in book.seria.all %}{{ seria }}{% endfor %}
-        <p><b>Genre: </b>{% for genre in book.genre.all %}{{ genre }}{% endfor %}
+        <p><b>Athor: </b>{% for athor in book.athor.all %}<a href="{% url "catalog:athor_detail" athor.pk %}">{{ athor }}</a>{% endfor %}
+        <p><b>Seria: </b>{% for seria in book.seria.all %}<a href="{% url "catalog:seria_detail" seria.pk %}">{{ seria }}</a>{% endfor %}
+        <p><b>Genre: </b>{% for genre in book.genre.all %}<a href="{% url "catalog:genre_detail" genre.pk %}">{{ genre }}</a>{% endfor %}
         </div>
     </div>
 </div>
