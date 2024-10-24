@@ -17,13 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
-from testapp import views as testapp
+
 from user import views as user_app
+from books import views as books
 from . import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", testapp.home_page),
+    path("", books.MainView.as_view(), name="main"),
     path("login/", user_app.LoginUser.as_view(), name='login'),
     path("logout/", user_app.LogoutView.as_view(), name='logout'),
     path('password_change', user_app.PasswordChangeView.as_view(), name ='password_change'),

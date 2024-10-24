@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+
 from books.models import Book
 from . import models, forms
 
@@ -37,15 +38,17 @@ def get_current_cart(request):
         cart = bool(cart)
     return cart
 
-def fake_delete_cart(request):
+def delete_empty_cart(request):
     cart = get_current_cart(request)
-    has_book = models.BookInCart.objects.filter(cart=cart)
-    if not has_book:
-        request.session['cart_id'] = None
+    if cart:
+        has_book = models.BookInCart.objects.filter(cart=cart)
+        if not has_book:
+            cart.delete()
 
 def view_cart(request):
     cart = get_current_cart(request)
     context = {"cart": cart}
+    delete_empty_cart(request)
     return render(request, template_name="orders/view_cart.html", context=context)
 
 def add_to_cart(request):
@@ -89,9 +92,11 @@ def evaluate_cart(request):
             if key[0:4] == "acti":
                 action = value
         if action == "update":
-            fake_delete_cart(request)
+            delete_empty_cart(request)
             return HttpResponseRedirect(reverse_lazy("orders:view_cart"))
         elif action == "create":
+            if request.user.is_anonymous:
+                return HttpResponseRedirect(reverse_lazy("login"))
             return HttpResponseRedirect(reverse_lazy("orders:create_order"))
 
 
@@ -119,9 +124,18 @@ class CreateOrderView(generic.CreateView):
         self.object = order
         return HttpResponseRedirect(self.get_success_url())
     
-class Ordered(generic.TemplateView):
+class SuccesufulOrder(generic.TemplateView):
     template_name = "orders/ordered.html"
     
     def get(self, request, *args, **kwargs):
         request.session['cart_id'] = None
         return super().get(request, *args, **kwargs)
+    
+class Orders(generic.ListView):
+    model = models.Order
+    template_name = "orders/orders.html"
+
+class OrderDetail(generic.DetailView):
+    model = models.Order
+    template_name = "orders/order_detail.html"    
+    
