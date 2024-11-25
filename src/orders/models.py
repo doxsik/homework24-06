@@ -38,5 +38,8 @@ class Order(models.Model):
     phone = models.CharField(verbose_name="Phone", max_length=16)
     adress = models.CharField(max_length=100, verbose_name="Adress")
     
+    def get_absolute_url(self):
+        return reverse_lazy("orders:order_detail", kwargs = {"pk":self.pk})
+    
     def __str__(self):
         return f"Order {self.pk}"

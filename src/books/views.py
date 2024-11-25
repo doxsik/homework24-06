@@ -6,10 +6,21 @@ from django.db.models import Q
 from . import models
 
 # Create your views here.
+def last_books(request):
+    books = models.Book.objects.all().order_by("-data_created").values()
+    return books
+
+class MainView(generic.TemplateView):
+    model = models.Book
+    template_name = "main.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["books"] = last_books(self.request)
+        return context
 
 class BookList(generic.ListView):
     model = models.Book
-    paginate_by = 1
+    paginate_by = 10
 
 class BookCreate(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     model = models.Book

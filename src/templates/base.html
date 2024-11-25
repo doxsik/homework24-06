@@ -90,6 +90,7 @@
           
           <!-- Custom styles for this template -->
           <link href="{% static "bs/css/custom_css/carousel.css" %}" rel="stylesheet">
+          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     </head>
     <body>
@@ -145,7 +146,7 @@
         <header data-bs-theme="dark">
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
               <div class="container-fluid">
-                <a class="navbar-brand text-warning" href="#">BOOKSHOP</a>
+                <a class="navbar-brand text-warning" href="{% url "main" %}">BOOKSHOP</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -162,7 +163,9 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link disabled" aria-disabled="true"></a>
+                      <a class="nav-link" aria-current="page" href="{% url "orders:ordered_orders" %}">
+                        <img src="{% static "bs/svg/box-container-svgrepo-com.svg" %}" style="width: 2rem;">Orders
+                      </a>
                     </li>
                   </ul>
                   <form class="d-flex" role="search" action="{% url "books:book_search" %}" method="get">

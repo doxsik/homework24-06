@@ -5,7 +5,32 @@
     {% if cart %}
     <form action="{% url "orders:evaluate_cart" %}" method="post">
     {% csrf_token %}
-        <table class="table">
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+            }
+            
+            /* Firefox */
+            input[type=number] {
+            -moz-appearance: textfield;
+            width: 50px;
+            float: left;
+            }
+
+            #plus {
+                float: left;
+                display: flex;
+
+            }
+
+            #minus {
+                float: left;
+            }
+        </style>
+        <table id="table" class="table">
             <thead>
             <tr>
                 <th scope="col">Books</th>
@@ -16,11 +41,17 @@
             </thead>
             {% for book in cart.books.all %}
             <tbody>
-            <tr>
+            <tr id="{{book.id}}">
                 <td>{{book.book}}</td>
-                <td><input type="number" value="{{book.quantity}}" step="1" class="form-control" name="quantity.{{book.pk}}"></td>
-                <td>{{book.price}}</td>
+                <td>
+                    <button id="plus" type="button" onclick="plusNum('{{book.id}}')" class="btn">+</button>
+                    <input id="inp{{book.id}}" type="number" value="{{book.quantity}}" step="1" min="1" max = "99" class="form-control" name="quantity.{{book.pk}}">
+                    <button id="minus" type="button" onclick="minusNum('{{book.id}}')" class="btn">-</button>
+                </td>
+                <td id="prc{{book.id}}">{{book.price}}</td>
                 <td>{{book.total_price}}</td>
+                <td><button type="button" name="action" value="update" onclick="rowDel({{book.id}})" class="btn btn-danger">X</button></td>
+                <td>{{book.pk}}</td>
             </tr>
             </tbody>
             {% endfor %}
@@ -35,4 +66,44 @@
     {% else %}
     Your cart is empty
     {% endif %}
+
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        axios.defaults.headers.common['X-CSRFToken'] = csrftoken; 
+
+        const rowDel = (pk) => {
+            axios.delete(`http://localhost:8000/orders/api-book-in-cart/${pk}`)
+            .then(function(response) {
+                document.getElementById(pk).remove();
+                location.reload()
+            })
+        }
+        const plusNum = (pk) => {
+            document.getElementById("inp"+pk).value = parseInt(document.getElementById("inp"+pk).value) + 1
+            const valueInput = document.getElementById("inp"+pk).value
+            const valuePrice = document.getElementById("prc"+pk).innerText
+            const newData={ quantity: valueInput,
+                price: valuePrice
+            }
+            axios.put(`http://localhost:8000/orders/api-book-in-cart/${pk}/`, newData)
+            .then(function(response) {
+                location.reload()
+            })
+        }
+
+        const minusNum = (pk) => {
+            if (document.getElementById("inp"+pk).value > 0) {
+                document.getElementById("inp"+pk).value -= 1
+            }
+            const valueInput = document.getElementById("inp"+pk).value
+            const valuePrice = document.getElementById("prc"+pk).innerText
+            const newData={ quantity: valueInput,
+                price: valuePrice
+            }
+            axios.put(`http://localhost:8000/orders/api-book-in-cart/${pk}/`, newData)
+            .then(function(response) {
+                location.reload()
+            })
+        }
+    </script>
 {% endblock %}
