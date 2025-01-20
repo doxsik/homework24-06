@@ -1,0 +1,29 @@
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: bookstore_db
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  web:
+    image: bookstore:latest
+    container_name: bookstore_web
+    ports:
+      - 5000:5000
+    depends_on:
+      - postgres
+    volumes:
+      - static_volume:/bookstore/src/static
+      - media_volume:/bookstore/src/media
+    env_file:
+      - .env
+    command: >
+      bash -c "python ./manage.py collectstatic --noinput && python ./manage.py migrate && python ./manage.py runserver 0.0.0.0:5000"
+
+volumes:
+  static_volume:
+  media_volume:
+  db:
