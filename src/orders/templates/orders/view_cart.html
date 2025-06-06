@@ -68,9 +68,6 @@
     {% endif %}
 
     <script>
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        axios.defaults.headers.common['X-CSRFToken'] = csrftoken; 
-
         const rowDel = (pk) => {
             axios.delete(`http://localhost:8000/orders/api-book-in-cart/${pk}`)
             .then(function(response) {

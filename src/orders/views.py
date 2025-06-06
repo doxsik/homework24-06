@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.views import generic
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.contrib.auth.models import User
 
 from books.models import Book
 from . import models, forms
@@ -131,9 +134,17 @@ class SuccesufulOrder(generic.TemplateView):
         request.session['cart_id'] = None
         return super().get(request, *args, **kwargs)
     
-class Orders(generic.ListView):
+class Orders(LoginRequiredMixin, generic.ListView):
     model = models.Order
     template_name = "orders/orders.html"
+
+    def get_queryset(self):
+        username = self.request.user
+        user = User.objects.get(username=str(username))
+        carts = user.cart.all()
+        for cart in carts:
+            return models.Order.objects.filter(cart__in=carts)
+    
 
 class OrderDetail(generic.DetailView):
     model = models.Order

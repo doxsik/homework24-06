@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
+from datetime import timedelta, datetime
 
 
 # Create your models here.
@@ -33,10 +34,15 @@ class BookInCart(models.Model):
     def __str__(self):
         return f"Cart #{self.cart.pk} for {self.cart.user} with {self.quantity}"
     
+CHOICES = [("ASMB", "Assembling"), ("OTW","On the way"), ("RDY","Ready")]
+    
 class Order(models.Model):
     cart = models.OneToOneField(Cart, on_delete=models.PROTECT, related_name="order")
     phone = models.CharField(verbose_name="Phone", max_length=16)
     adress = models.CharField(max_length=100, verbose_name="Adress")
+    data_created = models.DateTimeField(auto_now=True, auto_now_add=False, null=True)
+    delivery_data = models.DateTimeField(default=datetime.now()+timedelta(days=2))
+    status = models.CharField(verbose_name="Status", max_length=150, choices=CHOICES, null=True)
     
     def get_absolute_url(self):
         return reverse_lazy("orders:order_detail", kwargs = {"pk":self.pk})

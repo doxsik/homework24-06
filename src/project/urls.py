@@ -34,6 +34,7 @@ urlpatterns = [
     path("books/", include("books.urls", namespace ="books")),
     path("accounts/", include("accounts.urls", namespace ="accounts")),
     path("orders/", include("orders.urls", namespace ="orders")),
+    path("adminpanel/", include("adminpanel.urls", namespace="adminpanel"))
 ]
 
 if settings.DEBUG:

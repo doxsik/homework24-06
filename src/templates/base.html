@@ -146,7 +146,11 @@
         <header data-bs-theme="dark">
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
               <div class="container-fluid">
+                {% if "adminpanel" in user.groups.all|join:"," %}
+                <a class="navbar-brand text-warning" href="{% url "main" %}">BSadminpanel</a>
+                {% else %}
                 <a class="navbar-brand text-warning" href="{% url "main" %}">BOOKSHOP</a>
+                {% endif %}
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -157,6 +161,7 @@
                         <img src="{% static "bs/svg/books-thin-svgrepo-com.svg" %}" style="width: 2rem;">Books
                       </a>
                     </li>
+                    {% if "adminpanel" not in user.groups.all|join:"," %}
                     <li class="nav-item">
                       <a class="nav-link" aria-current="page" href="{% url "orders:view_cart" %}">
                         <img src="{% static "bs/svg/shopping-cart-outline-svgrepo-com.svg" %}" style="width: 2rem;">Cart
@@ -167,6 +172,13 @@
                         <img src="{% static "bs/svg/box-container-svgrepo-com.svg" %}" style="width: 2rem;">Orders
                       </a>
                     </li>
+                    {% elif "adminpanel" in user.groups.all|join:"," %}
+                    <li class="nav-item">
+                      <a class="nav-link" aria-current="page" href="{% url "adminpanel:orders_list" %}">
+                        <img src="{% static "bs/svg/box-container-svgrepo-com.svg" %}" style="width: 2rem;">Orders
+                      </a>
+                    </li>
+                    {% endif %}
                   </ul>
                   <form class="d-flex" role="search" action="{% url "books:book_search" %}" method="get">
                     {{csrf_token}}

@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-lp&l!-fw6k(mif$8_z&0l(!u9cl)xqp-(ic(!i+@&lsfet@9*a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["doxsik.pythonanywhere.com", "localhost",]
+ALLOWED_HOSTS = ["doxsik.pythonanywhere.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "catalog",
     "books",
     "accounts",
-    "orders"
+    "orders",
+    "adminpanel"
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -143,7 +144,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -153,6 +154,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-CORS_ALLOW_ORIGINS = "localhost"
+#CORS_ALLOW_ORIGINS = ["localhost", "http://127.0.0.1:8000"]
+CORS_ALLOW_ALL_ORIGINS = True
 
-CSRF_USE_SESSIONS = True
+#CSRF_USE_SESSIONS = True
