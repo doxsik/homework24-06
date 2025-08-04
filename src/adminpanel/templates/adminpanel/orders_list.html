@@ -4,34 +4,63 @@
 
 {% block content %}
 <h1 class="mt-5">Orders</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Ordered</th>
-            <th scope="col">Status</th>
-            <th scope="col">Delivery date</th>
-            <th scope="col">Adress</th>
-            <th scope="col">Phone</th>
-        <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% with number=1 %}
-    {% for order in object_list %}
-        <tr>
-            <th scope="row">
-                {{ order.pk }}
-            </th>
-            <td><a href="{% url "orders:order_detail" order.pk %}">{{order.data_created}}</a></td>
-            <td><a href="{% url "orders:order_detail" order.pk %}">{{order.status}}</a></td>
-            <td><a href="{% url "orders:order_detail" order.pk %}">{{order.delivery_data}}</a></td>
-            <td><a href="{% url "orders:order_detail" order.pk %}">{{order.adress}}</a></td>
-            <td><a href="{% url "orders:order_detail" order.pk %}">{{order.phone}}</a></td>
-        </tr>
-    {% endfor %}
-    {% endwith %}
-    </tbody>
-</table>
-{% endblock %}
+<form action="{% url "adminpanel:orders_list" %}" method="post"></form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Ordered</th>
+                <th scope="col">Status</th>
+                <th scope="col">Delivery date</th>
+                <th scope="col">Adress</th>
+                <th scope="col">Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in object_list %}
+            <tr>
+                <th scope="row">
+                    {{ order.pk }}
+                </th>
+                <td>{{order.data_created}}</td>
+                <td><select id='{{ order.pk }}' class="form-select" aria-label="Default select example" onchange="changeStatus('{{ order.pk }}')">
+                        <option hidden value="{{ order.status }}" selected>{{ order.get_status_display }}</option>
+                        <option value="ASMB">Assembling</option>
+                        <option value="OTW">On the way</option>
+                        <option value="RDY">Ready</option>
+                    </select>
+                </td>
+                <td><input id="delivery{{ order.pk }}" type="datetime-local" value="{{order.delivery_data|date:"Y-m-d"}}T{{order.delivery_data|date:"H:i"}}" onchange="changeStatus('{{ order.pk }}')"></td>
+                <td id="adress{{ order.pk }}" value="{{order.adress}}">{{order.adress}}</td>
+                <td id="phone{{ order.pk }}" value="{{order.phone}}">{{order.phone}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
 
+<script>
+    const changeStatus = (pk) => {
+        console.log('hi')
+        const selectedValue = document.getElementById(pk).value
+        const phone = document.getElementById("phone"+pk).innerText
+        const adress = document.getElementById("adress"+pk).innerText
+        const deliveryDate = document.getElementById("delivery"+pk).value
+        console.log(phone, adress, deliveryDate)
+        const newData = { 
+                phone: phone,
+                adress: adress,
+                status: selectedValue,
+                delivery_data: deliveryDate+":00Z"
+                }
+        const config = {
+            headers: {"X-CSRFToken": '{{ csrf_token }}'}
+        }
+        console.log(newData)        
+        axios.put(`{% url "adminpanel:orders_list" %}api-orders/${pk}/`, newData, config)
+            .then(function(response) {                  
+                //location.reload()
+                })
+        }
+</script>
+{% endblock %}

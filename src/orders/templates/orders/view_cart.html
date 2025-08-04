@@ -50,7 +50,7 @@
                 </td>
                 <td id="prc{{book.id}}">{{book.price}}</td>
                 <td>{{book.total_price}}</td>
-                <td><button type="button" name="action" value="update" onclick="rowDel({{book.id}})" class="btn btn-danger">X</button></td>
+                <td><button type="button" name="action" value="update" onclick="rowDel('{{book.id}}')" class="btn btn-danger">X</button></td>
                 <td>{{book.pk}}</td>
             </tr>
             </tbody>
@@ -68,8 +68,12 @@
     {% endif %}
 
     <script>
+        const config = {
+            headers: {"X-CSRFToken": '{{ csrf_token }}'}
+        }
+
         const rowDel = (pk) => {
-            axios.delete(`http://localhost:8000/orders/api-book-in-cart/${pk}`)
+            axios.delete(`{% url "orders:view_cart"  %}api-book-in-cart/${pk}`, config)
             .then(function(response) {
                 document.getElementById(pk).remove();
                 location.reload()
@@ -82,7 +86,7 @@
             const newData={ quantity: valueInput,
                 price: valuePrice
             }
-            axios.put(`http://localhost:8000/orders/api-book-in-cart/${pk}/`, newData)
+            axios.put(`{% url "orders:view_cart"  %}api-book-in-cart/${pk}/`, newData, config)
             .then(function(response) {
                 location.reload()
             })
@@ -97,8 +101,8 @@
             const newData={ quantity: valueInput,
                 price: valuePrice
             }
-            axios.put(`http://localhost:8000/orders/api-book-in-cart/${pk}/`, newData)
-            .then(function(response) {
+            axios.put(`{% url "orders:view_cart"  %}api-book-in-cart/${pk}/`, newData, config)
+            .then(function(response) { 
                 location.reload()
             })
         }

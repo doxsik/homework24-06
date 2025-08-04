@@ -21,7 +21,7 @@ services:
     env_file:
       - .env
     command: >
-      bash -c "python ./manage.py collectstatic --noinput && python ./manage.py migrate && python ./manage.py runserver localhost:5000"
+      bash -c "python ./manage.py collectstatic --nвуoinput && python ./manage.py makemigrations && python ./manage.py migrate && python ./manage.py runserver 0.0.0.0:5000"
 
 volumes:
   static_volume:

@@ -5,7 +5,7 @@ from . import views as orders
 
 from rest_framework import routers
 router = routers.DefaultRouter()
-router.register(r'api-book-in-cart', apiviews.BookInCartViewSet)
+router.register(r'cart/api-book-in-cart', apiviews.BookInCartViewSet)
 
 app_name = "orders"
 urlpatterns = [
