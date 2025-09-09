@@ -14,7 +14,7 @@ class LogoutUser(LogoutView):
 
 
 class SignUpView(SuccessMessageMixin, CreateView):
-    template_name = 'register.html'
+    template_name = 'registration.html'
     success_url = reverse_lazy('login')
     form_class = UserRegisterForm
     success_message = "Your profile was created successfully"
