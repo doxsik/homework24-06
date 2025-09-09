@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["doxsik.pythonanywhere.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["93.183.73.125", "doxsik.pythonanywhere.com", "localhost", "127.0.0.1", "www.bizunok.ru", "bizunok.ru"]
 
 
 # Application definition
@@ -128,8 +128,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-MEDIA_URL = '/media/'
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 STATIC_ROOT = BASE_DIR.parent / "static"
 MEDIA_ROOT = BASE_DIR.parent / "media"
 
@@ -159,3 +159,10 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_USE_SESSIONS = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+CRSF_TRUSTED_ORIGINS = ["www.bizunok.ru", "bizunok.ru"]

@@ -7,21 +7,18 @@ services:
       - db:/var/lib/postgresql/data
     env_file:
       - .env
-    environment:
-     POSTGRES_DB: ${DATABASE_NAME}
-     POSTGRES_USER: ${DATABASE_USERNAME}
-     POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
 
   web:
     image: bookstore:latest
     container_name: bookstore_web
     ports:
-      - 5000:5000
+      - 8000:8000
     depends_on:
       - postgres
     volumes:
-      - static:/bookstore/src/static
-      - media:/bookstore/src/media
+      - .:/bookstore/src
+      - static:/bookstore/static
+      - media:/bookstore/media
     env_file:
       - .env
   nginx:
@@ -32,8 +29,8 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt/:/etc/letsencrypt/
-      - static:/bookstore/src/static
-      - media:/bookstore/src/media
+      - static:/bookstore/static
+      - media:/bookstore/media
     depends_on:
       - web
       
