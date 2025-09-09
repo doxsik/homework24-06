@@ -29,6 +29,7 @@ urlpatterns = [
     path("", books.MainView.as_view(), name="main"),
     path("login/", user_app.LoginUser.as_view(), name='login'),
     path("logout/", user_app.LogoutView.as_view(), name='logout'),
+    path("signup/", user_app.SignUpView.as_view(), name="signup"),
     path('password_change', user_app.PasswordChangeView.as_view(), name ='password_change'),
     path("catalog/", include("catalog.urls", namespace="catalog")),
     path("books/", include("books.urls", namespace ="books")),
